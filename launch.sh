@@ -7,7 +7,7 @@ echo "[ + ] ( 1 ) - Instalacion en REAL"
 echo "[ + ] ( 2 ) - Instalacion em VM"
 echo ""
 
-read var_opcion
+read realVM
 echo ""
 echo ""
 echo "[ + ] Install YAY Paru(s/N)"
@@ -27,8 +27,8 @@ then
     git clone https://aur.archlinux.org/paru.git
     cd paru
     makepkg -si
-    cd $pwd
 fi
+cd $pwd
 echo ""
 echo ""
 echo "[ + ] Install Basics (s/N)"
@@ -36,8 +36,8 @@ echo ""
 read yesno
 if [ $yesno = "s" ]
 then
-    sudo pacman -S neovim kitty net-tools --noconfirm
-    sudo pacman -S rclone openresolv systemd-resolvconf --noconfirm
+    sudo pacman -S neovim kitty net-tools lsd thunar --noconfirm
+    sudo pacman -S rclone openresolv systemd-resolvconf cron ranger fuse --noconfirm
     sudo pacman -S neofetch sshfs vifm curl htop wget neofetch tree fzf python-pip npm ranger ueberzug ripgrep fd universal-ctags --noconfirm
     yay flameshot
     yay wireguard-tools
@@ -45,8 +45,15 @@ then
     mkdir ~/.config/kitty
     cp .config/kitty/kitty.conf ~/.config/kitty
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
+    if [ $realVM = "2" ]
+    then
+        sudo pacman -S open-vm-tools --noconfirm
+        sudo pacman -S xf86-video-vmware xf86-input-vmmouse --noconfirm
+        sudo systemctl enable --now vmtoolsd
+    fi
+    cd $pwd
 fi
-fi
+cd $pwd
 echo ""
 echo ""
 echo "[ + ] Install Fonts (s/N)"
@@ -66,8 +73,11 @@ then
     sudo wget https://rubjo.github.io/victor-mono/VictorMonoAll.zip
 	sudo unzip VictorMonoAll.zip
     sudo mv VictorMonoAll/TTF/* .
-    cd $pwd
+    cd /usr/share/fonts
+    sudo curl -o iosevka.zip https://fontlot.com/downfile?post_id=105610&post_slug=iosevka-font-family&pf_nonce=8b11cb3408
+    unzip iosevka.zip
 fi
+cd $pwd
 echo ""
 echo ""
 echo "[ + ] Install Awesome dependences[paru] (s/N)"
@@ -86,11 +96,16 @@ then
     sudo pacman -S polybar nitrogen --noconfirm
     
     # Copias
-    cp -r ./polybar ~/.config
-    cp picom.conf ~/.config
+    cp -r config/* ~/.config
     
     # Lock
     yay i3lock-color
+    git clone https://github.com/Raymo111/i3lock-color.git
+	cd i3lock-color
+	./build.sh
+	./install-i3lock-color.sh
+    cd ..
+    rm -rfv i3lock-color 
 
     #Rofi
     mkdir -p ~/.config/rofi/themes/
@@ -102,6 +117,7 @@ then
     cd ..
     rm -rfv rofi-themes-collection
 fi
+cd $pwd
 echo ""
 echo ""
 echo "[ + ] Install zsh, omzsh (s/N)"
@@ -109,11 +125,11 @@ echo ""
 read yesno
 if [ $yesno = "s" ]
 then
-    cd $pwd
     sudo pacman -S zsh
     sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
     cp p10k.zsh ~/.p10k.zsh
     cp zshrc ~/.zshrc
+
     yay -S --noconfirm zsh-theme-powerlevel10k-git
     echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
     sudo pacman -S powerline-common awesome-terminal-fonts
@@ -124,6 +140,7 @@ then
 	git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.zsh/zsh-syntax-highlighting
     wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/plugins/sudo/sudo.plugin.zsh -P ~/.zsh
 fi
+cd $pwd
 echo ""
 echo ""
 echo "[ + ] Install VSCode (s/N)"
@@ -137,6 +154,7 @@ then
     makepkg -s
     sudo pacman -U visual-studio-code-bin-*.tar*
 fi
+cd $pwd
 
 
 
