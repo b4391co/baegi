@@ -45,6 +45,8 @@ then
     mkdir ~/.config/kitty
     cp .config/kitty/kitty.conf ~/.config/kitty
     git clone https://github.com/NvChad/NvChad ~/.config/nvim --depth 1 && nvim
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+    ~/.fzf/install
     if [ $realVM = "2" ]
     then
         sudo pacman -S open-vm-tools --noconfirm

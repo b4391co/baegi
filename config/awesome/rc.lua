@@ -106,7 +106,7 @@ myawesomemenu = {
                                      { " firefox", "firefox" },
                                      { " vivaldi", "vivaldi" },
                                      { " vs code", "code" },
-                                     { " files", "thunar" }
+                                     { " files", "nautilus" }
                                    }
                          })
  
@@ -410,8 +410,8 @@ end,
     {description = "brave-browser ", group = "launcher"}),
     awful.key({ alt, "Control" }, "c", function () awful.spawn("code") end,
     {description = "code", group = "launcher"}),
-    awful.key({ super            }, "e", function () awful.spawn("thunar") end,
-    {description = "thunar", group = "launcher"}),
+    awful.key({ super            }, "e", function () awful.spawn("nautilus") end,
+    {description = "nautilus", group = "launcher"}),
     awful.key({                   }, "Print", function () awful.spawn("flameshot gui") end,
     {description = "flameshot", group = "launcher"}),
     awful.key({ super            }, "r", function () awful.spawn("rofi -show run -show-icons -theme ~/.config/rofi/themes/rounded-blue-dark") end,
