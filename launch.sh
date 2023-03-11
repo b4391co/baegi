@@ -172,7 +172,7 @@ read selec
         fi  
         if [ $app = "X" ]
         then
-            selec=0
+            selec=0 
         fi     
     done
     while [ $selec = "2" ]
