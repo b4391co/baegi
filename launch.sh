@@ -79,7 +79,7 @@ then
     sudo curl -o iosevka.zip https://fontlot.com/downfile?post_id=105610&post_slug=iosevka-font-family&pf_nonce=8b11cb3408
     unzip iosevka.zip
     cd $pwd
-    rm *.ttf
+    sudo rm -rfv *.ttf EOT OTF TTF WOFF WOFF2 *.zip
 fi
 cd $pwd
 echo ""
@@ -157,6 +157,7 @@ then
     cd visual-studio-code-bin/
     makepkg -s
     sudo pacman -U visual-studio-code-bin-*.tar*
+    rm -rfv visual-studio* 
 fi
 cd $pwd
 
