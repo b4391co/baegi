@@ -80,4 +80,4 @@ alias copy='xclip -sel clip'
 alias wifiscan='nmcli dev wifi'
 alias battery="acpi | awk '{print $4}' | awk -F ',' '{print $1 }'"
 
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme'
+source '/usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme

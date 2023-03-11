@@ -52,6 +52,10 @@ then
         sudo pacman -S open-vm-tools --noconfirm
         sudo pacman -S xf86-video-vmware xf86-input-vmmouse --noconfirm
         sudo systemctl enable --now vmtoolsd
+        sudo pacman -S virtualbox-guest-iso
+        sudo mount /usr/lib/virtualbox/additions/VboxGuestAdditions.iso /mnt
+        sudo /mnt/VBoxLinuxAdditions.run
+        sudo umount /mnt
     fi
     cd $pwd
 fi
@@ -109,7 +113,12 @@ then
 	./build.sh
 	./install-i3lock-color.sh
     cd ..
-    rm -rfv i3lock-color 
+    rm -rfv i3lock-color
+    git clone https://github.com/meskarune/i3lock-fancy.git
+    cd i3lock-fancy
+    sudo make install
+    cd ..
+    rm -rfv i3lock-fancy
 
     #Rofi
     mkdir -p ~/.config/rofi/themes/
@@ -135,7 +144,6 @@ then
     cp zshrc ~/.zshrc
 
     yay -S --noconfirm zsh-theme-powerlevel10k-git
-    echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
     sudo pacman -S powerline-common awesome-terminal-fonts
     yay -S --noconfirm ttf-meslo-nerd-font-powerlevel10k
     sed -i "s/username/$username/g" ~/.zshrc
