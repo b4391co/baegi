@@ -78,6 +78,8 @@ then
     cd /usr/share/fonts
     sudo curl -o iosevka.zip https://fontlot.com/downfile?post_id=105610&post_slug=iosevka-font-family&pf_nonce=8b11cb3408
     unzip iosevka.zip
+    cd $pwd
+    rm *.ttf
 fi
 cd $pwd
 echo ""
