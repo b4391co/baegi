@@ -188,6 +188,7 @@ read selec
         if [ $app = "1" ]
         then
             cd $pwd
+            sudo pacman -S gnome
             paru -S awesome-git
             paru -Sy picom-git wezterm rofi acpi acpid acpi_call upower lxappearance-gtk3 \
             jq inotify-tools polkit-gnome xdotool xclip gpick ffmpeg blueman redshift \
@@ -250,6 +251,7 @@ read selec
         then
             #1
             cd $pwd
+            sudo pacman -S gnome
             paru -S awesome-git
             paru -Sy picom-git wezterm rofi acpi acpid acpi_call upower lxappearance-gtk3 \
             jq inotify-tools polkit-gnome xdotool xclip gpick ffmpeg blueman redshift \
