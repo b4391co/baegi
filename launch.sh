@@ -83,7 +83,7 @@ read selec
                 sudo systemctl enable --now vmtoolsd
                 sudo pacman -S virtualbox-guest-iso --noconfirm
                 sudo mount /usr/lib/virtualbox/additions/VboxGuestAdditions.iso /mnt
-                sudo /mnt/VBoxLinuxAdditions.run
+                sudo sh /mnt/VBoxLinuxAdditions.run
                 sudo umount /mnt
             fi
         fi  
@@ -139,7 +139,7 @@ read selec
             echo "[ + ] ( 2 ) - Instalacion en VM"
             echo ""
             read realVM
-            sudo pacman -S neovim wezterm net-tools lsd thunar --noconfirm
+            sudo pacman -S neovim wezterm net-tools lsd thunar vi --noconfirm
             sudo pacman -S rclone openresolv systemd-resolvconf cron ranger fuse --noconfirm
             sudo pacman -S neofetch sshfs vifm curl htop wget neofetch tree fzf python-pip npm ranger ueberzug ripgrep fd universal-ctags --noconfirm
             yay -S flameshot --noconfirm
@@ -193,6 +193,7 @@ read selec
         if [ $app = "5" ]
         then
             yay -S --noconfirm nmap wireshark
+            sudo pacman -S --noconfirm  inetutils
         fi
         if [ $app = "6" ]
         then
@@ -200,6 +201,22 @@ read selec
             yay -S docker  --noconfirm
             yay -S docker-compose  --noconfirm
             sudo usermod -aG docker $USER
+            sudo systemctl enable --now docker
+        fi
+        if [ $app = "7" ]
+        then
+            cd $pwd 
+            yay -S qemu docker vpcs dynamips libvirt --noconfirm
+            yay -S gns3-server gns3-gui --noconfirm
+            sudo brctl addbr virbr0
+            sudo ip link set virbr0 up
+            git clone https://github.com/GNS3/ubridge
+            cd ubridge 
+            make
+            sudo make install
+            cd ..
+            rm -rfv ubridge
+            echo alias virbr='sudo brctl addbr virbr0;sudo ip link set virbr0 up' ~/.zshrc
         fi
     done
     while [ $selec = "2" ]

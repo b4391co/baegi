@@ -27,6 +27,7 @@ nitrogen --restore
 sleep 0,1
 clear
 
+#startvar=`cat ~/.startcounter`
 
 #if [ $startvar -eq 0 ]
 #then
@@ -61,7 +62,7 @@ function target(){
     echo "$ip_address $machine_name" > ~/.config/polybar/scripts/target
     export T=$ip_address
 }
-
+source '/usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme'
 neofetch
 
 # ALIAS
@@ -79,5 +80,4 @@ alias gitc='git config --global user.name "!!!OTHERUSER!!!" ; git config --globa
 alias copy='xclip -sel clip'
 alias wifiscan='nmcli dev wifi'
 alias battery="acpi | awk '{print $4}' | awk -F ',' '{print $1 }'"
-
-source '/usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+alias img='wezterm imgcat'
