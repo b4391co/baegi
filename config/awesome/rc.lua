@@ -34,9 +34,9 @@ end
 autorun = true
 autorunApps = 
 { 
-    "picom",  
-    "/home/b4391co/.config/polybar/launch.sh",
-    "nitrogen --restore",
+      "picom",  
+      "/home/b4391co/.config/polybar/launch.sh",
+      "nitrogen --restore",
 }
 
 if autorun then
@@ -416,15 +416,11 @@ end,
     {description = "nautilus", group = "launcher"}),
     awful.key({                   }, "Print", function () awful.spawn("flameshot gui") end,
     {description = "flameshot", group = "launcher"}),
-    awful.key({ super            }, "r", function () awful.spawn("rofi -show run -show-icons -theme ~/.config/rofi/themes/rounded-blue-dark") end,
+    awful.key({ super            }, "r", function () awful.spawn("rofi -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/themes/rofi.rasi") end,
     {description = "rofi", group = "launcher"}),
-    awful.key({ super            }, "d", function () awful.spawn("rofi -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/themes/rofi.rasi") end,
+    awful.key({ alt,           }, "Tab", function () awful.spawn("rofi -show window -show-icons -theme ~/.config/rofi/themes/spotlight.rasi") end,
     {description = "rofi", group = "launcher"}),
-    awful.key({ alt,           }, "Tab", function () awful.spawn("rofi -show window -show-icons -theme ~/.config/rofi/themes/rounded-blue-dark") end,
-    {description = "rofi", group = "launcher"}),
-    awful.key({ super,  "Shift"  }, "r", function () awful.spawn("rofi -show ssh -show-icons -theme ~/.config/rofi/themes/rounded-blue-dark") end,
-    {description = "rofi", group = "launcher"}),
-    awful.key({ super  }, "d", function () awful.spawn("rofi -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/themes/rofi.rasi") end,
+    awful.key({ super,  "Shift"  }, "r", function () awful.spawn("rofi -show ssh -show-icons -theme ~/.config/rofi/themes/spotlight.rasi") end,
     {description = "rofi", group = "launcher"}),
     awful.key({ super,           }, "l", function () awful.spawn("i3lock-fancy") end,
     {description = "i3lock", group = "launcher"}),
