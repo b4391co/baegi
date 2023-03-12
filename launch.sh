@@ -36,6 +36,7 @@ read selec
         echo "[ + ] ( T ) - All"
         echo "[ + ] ( 5 ) - Networks"
         echo "[ + ] ( 6 ) - Docker"
+        echo "[ + ] ( 7 ) - GNS 3"
         echo "[ + ] ( X ) - close"
         echo ""
         read app
