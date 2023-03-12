@@ -239,6 +239,12 @@ read selec
         if [ $app = "1" ]
         then
             cd $pwd
+            echo ""
+            echo ""
+            echo "[ + ] ( 1 ) - Instalacion en REAL"
+            echo "[ + ] ( 2 ) - Instalacion en VM"
+            echo ""
+            read realVM
             sudo pacman -S gnome --noconfirm
             paru -S awesome-git
             paru -Sy picom-git wezterm rofi acpi acpid acpi_call upower lxappearance-gtk3 \
@@ -252,6 +258,11 @@ read selec
             
             # Copias
             cp -r config/* ~/.config
+            
+            if [ $realVM = "2" ]
+            then
+                mv ~/.config/picomVM ~/.config/picom.conf
+            fi
             
             # Lock
             yay -S i3lock-color  --noconfirm
@@ -302,12 +313,30 @@ read selec
         then
             #1
             cd $pwd
+            echo ""
+            echo ""
+            echo "[ + ] ( 1 ) - Instalacion en REAL"
+            echo "[ + ] ( 2 ) - Instalacion en VM"
+            echo ""
+            read realVM
             sudo pacman -S gnome --noconfirm
             paru -S awesome-git
             paru -Sy picom-git wezterm rofi acpi acpid acpi_call upower lxappearance-gtk3 \
             jq inotify-tools polkit-gnome xdotool xclip gpick ffmpeg blueman redshift \
             pipewire pipewire-alsa pipewire-pulse alsa-utils brightnessctl feh maim \
             mpv mpd mpc mpdris2 python-mutagen ncmpcpp playerctl --needed
+            
+            # Instalador
+            sudo systemctl enable --now mpd.service
+            sudo pacman -S polybar nitrogen --noconfirm
+            
+            # Copias
+            cp -r config/* ~/.config
+            
+            if [ $realVM = "2" ]
+            then
+                mv ~/.config/picomVM ~/.config/picom.conf
+            fi
             
             # Instalador
             sudo systemctl enable --now mpd.service
