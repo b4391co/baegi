@@ -6,6 +6,10 @@ if [ "$status" == "Charging" ]
 then
     echo "%{F#00ff44} $bat%"
 fi
+if [ "$status" == "Not" ]
+then
+    echo "%{F#00ff44} $(acpi | awk '{print $5}')"
+fi
 if [ $bat -le 10 ]
 then
     echo "%{F#ff1500} $bat%"
@@ -36,9 +40,9 @@ then
 elif [ $bat -le 90 ]
 then
     echo "%{F#00ff44} $bat%"
-elif [ $bat -eq 100 ]
+elif [ $bat -le 100 ]
 then
-    echo "%{F#00ff44} 100%"
+    echo "%{F#00ff44} $bat%"
 fi
 
 
