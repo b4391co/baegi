@@ -20,6 +20,8 @@ read selec
         echo "[ + ] ( 3 ) - Install zsh, omzsh"
         echo "[ + ] ( 4 ) - vscode"
         echo "[ + ] ( T ) - All"
+        echo "[ + ] ( 5 ) - Networks"
+        echo "[ + ] ( 6 ) - Docker"
         echo "[ + ] ( X ) - close"
         echo ""
         read app
@@ -52,8 +54,8 @@ read selec
             sudo pacman -S neovim wezterm net-tools lsd thunar --noconfirm
             sudo pacman -S rclone openresolv systemd-resolvconf cron ranger fuse --noconfirm
             sudo pacman -S neofetch sshfs vifm curl htop wget neofetch tree fzf python-pip npm ranger ueberzug ripgrep fd universal-ctags --noconfirm
-            yay flameshot
-            yay wireguard-tools
+            yay -S flameshot --noconfirm
+            yay -S wireguard-tools --noconfirm
             sudo systemctl enable --now systemd-resolved.service
             mkdir ~/.config/wezterm
             cp config/wezterm/wezterm.lua ~/.config/wezterm
@@ -65,7 +67,7 @@ read selec
                 sudo pacman -S open-vm-tools --noconfirm
                 sudo pacman -S xf86-video-vmware xf86-input-vmmouse --noconfirm
                 sudo systemctl enable --now vmtoolsd
-                sudo pacman -S virtualbox-guest-iso
+                sudo pacman -S virtualbox-guest-iso --noconfirm
                 sudo mount /usr/lib/virtualbox/additions/VboxGuestAdditions.iso /mnt
                 sudo /mnt/VBoxLinuxAdditions.run
                 sudo umount /mnt
@@ -74,13 +76,13 @@ read selec
         if [ $app = "3" ]
         then    
             cd $pwd
-            sudo pacman -S zsh
+            sudo pacman -S zsh --noconfirm
             sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
             cp p10k.zsh ~/.p10k.zsh
             cp zshrc ~/.zshrc
 
             yay -S --noconfirm zsh-theme-powerlevel10k-git
-            sudo pacman -S powerline-common awesome-terminal-fonts
+            sudo pacman -S powerline-common awesome-terminal-fonts --noconfirm
             yay -S --noconfirm ttf-meslo-nerd-font-powerlevel10k
             sed -i "s/username/$username/g" ~/.zshrc
             git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
@@ -96,7 +98,7 @@ read selec
             git clone https://AUR.archlinux.org/visual-studio-code-bin.git
             cd visual-studio-code-bin/
             makepkg -s
-            sudo pacman -U visual-studio-code-bin-*.tar*
+            sudo pacman -U visual-studio-code-bin-*.tar*  --noconfirm
             rm -rfv visual-studio* 
         fi
         if [ $app = "T" ]
@@ -108,7 +110,7 @@ read selec
             sudo chown -R $username:$username ./yay-git
             cd yay-git
             makepkg -si
-            sudo yay -Syu
+            yay -Syu --noconfirm
             mkdir ~/Descargas
             cd ~/Descargas
             sudo pacman -S --needed base-devel --noconfirm
@@ -126,8 +128,8 @@ read selec
             sudo pacman -S neovim wezterm net-tools lsd thunar --noconfirm
             sudo pacman -S rclone openresolv systemd-resolvconf cron ranger fuse --noconfirm
             sudo pacman -S neofetch sshfs vifm curl htop wget neofetch tree fzf python-pip npm ranger ueberzug ripgrep fd universal-ctags --noconfirm
-            yay flameshot
-            yay wireguard-tools
+            yay -S flameshot --noconfirm
+            yay -S wireguard-tools --noconfirm
             sudo systemctl enable --now systemd-resolved.service
             mkdir ~/.config/wezterm
             cp config/wezterm/wezterm.lua ~/.config/wezterm
@@ -139,21 +141,21 @@ read selec
                 sudo pacman -S open-vm-tools --noconfirm
                 sudo pacman -S xf86-video-vmware xf86-input-vmmouse --noconfirm
                 sudo systemctl enable --now vmtoolsd
-                sudo pacman -S virtualbox-guest-iso
+                sudo pacman -S virtualbox-guest-iso --noconfirm
                 sudo mount /usr/lib/virtualbox/additions/VboxGuestAdditions.iso /mnt
                 sudo /mnt/VBoxLinuxAdditions.run
                 sudo umount /mnt
             fi
             #3
             cd $pwd
-            sudo pacman -S zsh
+            sudo pacman -S zsh --noconfirm
             sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
             cp p10k.zsh ~/.p10k.zsh
             cp zshrc ~/.zshrc
             #4
             cd $pwd
             yay -S --noconfirm zsh-theme-powerlevel10k-git
-            sudo pacman -S powerline-common awesome-terminal-fonts
+            sudo pacman -S powerline-common awesome-terminal-fonts --noconfirm
             yay -S --noconfirm ttf-meslo-nerd-font-powerlevel10k
             sed -i "s/username/$username/g" ~/.zshrc
             git clone https://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
@@ -167,13 +169,24 @@ read selec
             git clone https://AUR.archlinux.org/visual-studio-code-bin.git
             cd visual-studio-code-bin/
             makepkg -s
-            sudo pacman -U visual-studio-code-bin-*.tar*
+            sudo pacman -U visual-studio-code-bin-*.tar* --noconfirm
             rm -rfv visual-studio* 
         fi  
         if [ $app = "X" ]
         then
             selec=0 
-        fi     
+        fi
+        if [ $app = "5" ]
+        then
+            yay -S --noconfirm nmap wireshark
+        fi
+        if [ $app = "6" ]
+        then
+            cd $pwd 
+            yay -S docker  --noconfirm
+            yay -S docker-compose  --noconfirm
+            sudo usermod -aG docker $USER
+        fi
     done
     while [ $selec = "2" ]
     do
@@ -188,7 +201,7 @@ read selec
         if [ $app = "1" ]
         then
             cd $pwd
-            sudo pacman -S gnome
+            sudo pacman -S gnome --noconfirm
             paru -S awesome-git
             paru -Sy picom-git wezterm rofi acpi acpid acpi_call upower lxappearance-gtk3 \
             jq inotify-tools polkit-gnome xdotool xclip gpick ffmpeg blueman redshift \
@@ -203,7 +216,7 @@ read selec
             cp -r config/* ~/.config
             
             # Lock
-            yay i3lock-color
+            yay -S i3lock-color  --noconfirm
             git clone https://github.com/Raymo111/i3lock-color.git
             cd i3lock-color
             ./build.sh
@@ -229,11 +242,11 @@ read selec
         if [ $app = "2" ]
         then
             cd $pwd
-            yay victor ttf --noconfirm
-            yay hack nerd font --noconfirm
-            yay fonts-powerline
-            yay iosevka ttf
-            yay font-manager
+            yay -S ttf-victor-mono --noconfirm
+            yay -S ttf-hack-nerd --noconfirm
+            yay -S fonts-powerline --noconfirm
+            yay -S ttf-iosevka-nerd --noconfirm
+            yay -y font-manager --noconfirm
             mkdir /usr/local/share/fonts
             cd /usr/local/share/fonts
             sudo wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip
@@ -251,7 +264,7 @@ read selec
         then
             #1
             cd $pwd
-            sudo pacman -S gnome
+            sudo pacman -S gnome --noconfirm
             paru -S awesome-git
             paru -Sy picom-git wezterm rofi acpi acpid acpi_call upower lxappearance-gtk3 \
             jq inotify-tools polkit-gnome xdotool xclip gpick ffmpeg blueman redshift \
@@ -266,7 +279,7 @@ read selec
             cp -r config/* ~/.config
             
             # Lock
-            yay i3lock-color
+            yay -S i3lock-color --noconfirm
             git clone https://github.com/Raymo111/i3lock-color.git
             cd i3lock-color
             ./build.sh
@@ -292,9 +305,9 @@ read selec
             cd $pwd
             yay victor ttf --noconfirm
             yay hack nerd font --noconfirm
-            yay fonts-powerline
-            yay iosevka ttf
-            yay font-manager
+            yay fonts-powerline --noconfirm
+            yay iosevka ttf --noconfirm
+            yay font-manager --noconfirm
             mkdir /usr/local/share/fonts
             cd /usr/local/share/fonts
             sudo wget https://github.com/ryanoasis/nerd-fonts/releases/download/v2.1.0/Hack.zip

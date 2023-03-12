@@ -426,7 +426,7 @@ end,
     {description = "rofi", group = "launcher"}),
     awful.key({ super  }, "d", function () awful.spawn("rofi -no-lazy-grab -show drun -modi drun -theme ~/.config/rofi/themes/rofi.rasi") end,
     {description = "rofi", group = "launcher"}),
-    awful.key({ super,           }, "l", function () awful.spawn("i3lock-everblush") end,
+    awful.key({ super,           }, "l", function () awful.spawn("i3lock-fancy") end,
     {description = "i3lock", group = "launcher"}),
 
     awful.key({ alt, "Control" }, "d",     function () awful.tag.incmwfact( 0.05)          end,
