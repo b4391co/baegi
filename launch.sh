@@ -262,6 +262,7 @@ read selec
             if [ $realVM = "2" ]
             then
                 mv ~/.config/picomVM ~/.config/picom.conf
+                mv ~/.config/polybar/currentVM ~/.config/polybar/current.ini 
             fi
             
             # Lock
