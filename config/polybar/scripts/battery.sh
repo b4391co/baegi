@@ -1,7 +1,7 @@
 #!/bin/sh
 
-bat=$((`acpi | awk '{print $4}'| awk -F ',' '{print $1}' | awk -F '%' '{print $1}'`))
-status=`acpi | awk '{print $3}' | awk -F ',' '{print $1}'`
+bat=$((`acpi | grep "Battery 1" | awk '{print $4}'| awk -F ',' '{print $1}' | awk -F '%' '{print $1}'`))
+status=`acpi | grep "Battery 1" | awk '{print $3}' | awk -F ',' '{print $1}'`
 if [ "$status" == "Charging" ]
 then
     echo "%{F#00ff44} $bat%"

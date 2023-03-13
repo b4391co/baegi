@@ -12,7 +12,7 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
 ## Left bar
 polybar log -c ~/.config/polybar/current.ini &
-polybar primary -c ~/.config/polybar/workspace.ini &
+#polybar primary -c ~/.config/polybar/workspace.ini &
 polybar secondary -c ~/.config/polybar/current.ini &
 polybar target -c ~/.config/polybar/current.ini &
 
@@ -28,4 +28,10 @@ polybar battery -c ~/.config/polybar/current.ini &
 polybar network -c ~/.config/polybar/current.ini &
 polybar primary -c ~/.config/polybar/current.ini &
 
-
+if type "xrandr"; then
+  for m in $(xrandr --query | grep " connected" | cut -d" " -f1); do
+    MONITOR=$m polybar --reload primary -c ~/.config/polybar/workspace.ini  &
+  done
+else
+  polybar --reload primary -c ~/.config/polybar/workspace.ini  &
+fi
