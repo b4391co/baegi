@@ -66,7 +66,7 @@ read selec
             echo "[ + ] ( 2 ) - Instalacion en VM"
             echo ""
             read realVM
-            sudo pacman -S neovim wezterm net-tools lsd thunar --noconfirm
+            sudo pacman -S neovim wezterm net-tools vi lsd vivaldi --noconfirm
             sudo pacman -S rclone openresolv systemd-resolvconf cron ranger fuse --noconfirm
             sudo pacman -S neofetch sshfs vifm curl htop wget neofetch tree fzf python-pip npm ranger ueberzug ripgrep fd universal-ctags --noconfirm
             yay -S flameshot --noconfirm
@@ -140,7 +140,7 @@ read selec
             echo "[ + ] ( 2 ) - Instalacion en VM"
             echo ""
             read realVM
-            sudo pacman -S neovim wezterm net-tools lsd thunar vi --noconfirm
+            sudo pacman -S neovim wezterm net-tools vi lsd vivaldi --noconfirm
             sudo pacman -S rclone openresolv systemd-resolvconf cron ranger fuse --noconfirm
             sudo pacman -S neofetch sshfs vifm curl htop wget neofetch tree fzf python-pip npm ranger ueberzug ripgrep fd universal-ctags --noconfirm
             yay -S flameshot --noconfirm
@@ -193,8 +193,8 @@ read selec
         fi
         if [ $app = "5" ]
         then
-            yay -S --noconfirm nmap wireshark
-            sudo pacman -S --noconfirm  inetutils
+            yay -S --noconfirm nmap wireshark metasploit brave webshells netcat
+            sudo pacman -S --noconfirm inetutils
         fi
         if [ $app = "6" ]
         then
