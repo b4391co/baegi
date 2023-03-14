@@ -48,7 +48,7 @@ read selec
             sudo chown -R $username:$username ./yay-git
             cd yay-git
             makepkg -si
-            sudo yay -Syu
+            sudo yay -Syu --noconfirm
             mkdir ~/Descargas
             cd ~/Descargas
             sudo pacman -S --needed base-devel --noconfirm
@@ -123,7 +123,7 @@ read selec
             cd /opt
             sudo git clone https://aur.archlinux.org/yay-git.git
             sudo chown -R $username:$username ./yay-git
-            cd yay-git
+            cd yay-git 
             makepkg -si
             yay -Syu --noconfirm
             mkdir ~/Descargas
@@ -193,7 +193,7 @@ read selec
         fi
         if [ $app = "5" ]
         then
-            yay -S --noconfirm nmap wireshark metasploit brave webshells netcat
+            yay -S --noconfirm nmap wireshark metasploit webshells
             sudo pacman -S --noconfirm inetutils
         fi
         if [ $app = "6" ]
