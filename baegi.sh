@@ -78,18 +78,19 @@ do
         if [ $carpetaLAMP = "N" ] || [ $carpetaLAMP = "n" ]
         then
             carpetaLAMP=$pwd
+        else
+            mkdir $carpetaLAMP
         fi
-        mkdir $carpetaLAMP
         cd $directirioLAMP $carpetaLAMP
 
         if [ "$yesSQL" = "y" ] || [ "$yesSQL" = "Y" ]
         then
-            docker run -i -t --name lamp -p "80:80" -v $carpetaLAMP/app:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
+            docker run -i -t --name lamp -p "80:80" -v $carpetaLAMP:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
             docker rm lamp
             break
         elif [ "$yesSQL" = "N" ] || [ "$yesSQL" = "n" ]
         then
-            docker run -i -t --name lamp -p "80:80" -v $carpetaLAMP/app:/app -v  mattrayner/lamp:latest
+            docker run -i -t --name lamp -p "80:80" -v $carpetaLAMP:/app mattrayner/lamp:latest
             docker rm lamp               
             break
         fi
