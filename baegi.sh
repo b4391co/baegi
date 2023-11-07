@@ -85,12 +85,12 @@ do
         NombreLamp="lamp-"$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 15)
         if [ "$yesSQL" = "y" ] || [ "$yesSQL" = "Y" ]
         then
-            docker run -i -t --name $NombreLamp -p "80:80" -v $carpetaLAMP:/app -v $pwd/mysql:/var/lib/mysql mattrayner/lamp:latest
+            docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app -v $pwd/mysql:/var/lib/mysql mattrayner/lamp:latest
             docker rm $NombreLamp
             break
         elif [ "$yesSQL" = "N" ] || [ "$yesSQL" = "n" ]
         then
-            docker run -i -t --name $NombreLamp -p "80:80" -v $carpetaLAMP:/app  mattrayner/lamp:latest
+            docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app  mattrayner/lamp:latest
             docker rm $NombreLamp               
             break
         fi
@@ -102,6 +102,15 @@ do
         break
     fi
     if [ $app = "1n" ]
+    then
+        f_existe mattrayner/lamp
+        NombreLamp="lamp-"$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 15)
+        carpetaLAMP=$pwd
+        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app mattrayner/lamp:latest
+        docker rm $NombreLamp               
+        break
+    fi
+    if [ $app = "1ns" ]
     then
         f_existe mattrayner/lamp
         NombreLamp="lamp-"$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 15)
