@@ -38,21 +38,27 @@ function noSelectLamp {
     local pwd=$(pwd)
     local NombreLamp=$(generarNombre)
     local carpetaLAMP=$pwd
+    if [ $(ls -d */ | grep "mysql/"  | wc -l) = 1 ]
+    then
+        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "sql")
+    else
+        local carpetaFiles=$carpetaLAMP
+    fi
 
     if [ "$app" = "1n" ]
     then
         f_existe mattrayner/lamp
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app mattrayner/lamp:latest
+        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app mattrayner/lamp:latest
         docker rm $NombreLamp
-        return
+        exit
     fi
 
     if [ "$app" = "1ns" ]
     then
         f_existe mattrayner/lamp
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
+        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
         docker rm $NombreLamp
-        return
+        exit
     fi
 }
 
