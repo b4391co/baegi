@@ -28,11 +28,61 @@ function f_existe {
     fi
 }
 
+function generarNombre {
+    echo "lamp-"$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 15)
+}
+
+
+function noSelectLamp {
+    local app=$1
+    local pwd=$(pwd)
+    local NombreLamp=$(generarNombre)
+    local carpetaLAMP=$pwd
+
+    if [ "$app" = "1n" ]
+    then
+        f_existe mattrayner/lamp
+        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app mattrayner/lamp:latest
+        docker rm $NombreLamp
+        return
+    fi
+
+    if [ "$app" = "1ns" ]
+    then
+        f_existe mattrayner/lamp
+        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
+        docker rm $NombreLamp
+        return
+    fi
+}
+
+
 if [ $check = 0 ]
 then
     echo "alias baegi=\"$pwd/baegi.sh\"" >> ~/.zshrc
     echo "Alias 'baegi' agregado a ~/.zshrc"
 fi
+
+while [[ $# -gt 0 ]]
+do
+    key="$1"
+
+    case $key in
+        -1n)
+        app="1n"
+        shift
+        ;;
+        -1ns)
+        app="1ns"
+        shift
+        ;;
+        *)    # default case
+        shift
+        ;;
+    esac
+done
+
+noSelectLamp "$app"
 
 while [ $selec = 0 ]
 do
@@ -75,6 +125,7 @@ do
         printf "―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――"
         echo ""
         read yesSQL
+        NombreLamp=$(generarNombre)
         if [ $carpetaLAMP = "N" ] || [ $carpetaLAMP = "n" ]
         then
             carpetaLAMP=$pwd
@@ -82,7 +133,6 @@ do
             mkdir $carpetaLAMP
         fi
         cd $directirioLAMP $carpetaLAMP
-        NombreLamp="lamp-"$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 15)
         if [ "$yesSQL" = "y" ] || [ "$yesSQL" = "Y" ]
         then
             docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app -v $pwd/mysql:/var/lib/mysql mattrayner/lamp:latest
@@ -104,7 +154,6 @@ do
     if [ $app = "1n" ]
     then
         f_existe mattrayner/lamp
-        NombreLamp="lamp-"$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 15)
         carpetaLAMP=$pwd
         docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app mattrayner/lamp:latest
         docker rm $NombreLamp               
@@ -113,7 +162,6 @@ do
     if [ $app = "1ns" ]
     then
         f_existe mattrayner/lamp
-        NombreLamp="lamp-"$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 15)
         carpetaLAMP=$pwd
         docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
         docker rm $NombreLamp               
