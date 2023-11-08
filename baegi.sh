@@ -151,22 +151,7 @@ do
         docker run -it jasonchaffee/kali-linux:latest zsh
         break
     fi
-    if [ $app = "1n" ]
-    then
-        f_existe mattrayner/lamp
-        carpetaLAMP=$pwd
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app mattrayner/lamp:latest
-        docker rm $NombreLamp               
-        break
-    fi
-    if [ $app = "1ns" ]
-    then
-        f_existe mattrayner/lamp
-        carpetaLAMP=$pwd
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaLAMP:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
-        docker rm $NombreLamp               
-        break
-    fi
+    noSelectLamp "$app"
 done
 
 
