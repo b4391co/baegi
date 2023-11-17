@@ -1,10 +1,10 @@
 pwd=`pwd`
 username=`whoami`
+baegidir=`grep "baegi" ~/.zshrc | awk -F '=' '{print $2}' | tr -d '"' | xargs dirname`
 selec=0
 app=0
 t=0
 i=0
-check=`grep baegi ~/.zshrc | wc -l`
 
 function logo {
 clear
@@ -21,7 +21,15 @@ echo ""
 function f_existe {
     existe=$(docker images | grep $1 | wc -l)
     echo $existe
-    if [ $existe != 1 ]
+    if [ $existe -eq 0 -a "$1" = "baegilamp" ]
+    then
+        logo
+        cd $baegidir
+        cd .config/lampDockerFile
+        docker build -t baegilamp .
+        cd $pwd
+    fi
+    if [ $existe -eq 0 -a "$1" != "baegilamp" ]
     then
         logo
         docker pull $1
@@ -45,41 +53,64 @@ function noSelectLamp {
         local carpetaFiles=$carpetaLAMP
     fi
 
-    if [ "$app" = "1n" ]
+    if [ "$app" = "a" ]
     then
-        f_existe mattrayner/lamp
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app mattrayner/lamp:latest
+        f_existe baegilamp
+        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app baegilamp
         docker rm $NombreLamp
         exit
     fi
 
-    if [ "$app" = "1ns" ]
+    if [ "$app" = "as" ]
     then
-        f_existe mattrayner/lamp
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app -v $carpetaLAMP/mysql:/var/lib/mysql mattrayner/lamp:latest
+        f_existe baegilamp
+        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app -v $carpetaLAMP/mysql:/var/lib/mysql baegilamp
         docker rm $NombreLamp
         exit
+    fi
+
+        if [ $app = "kali" ]
+    then
+        f_existe jasonchaffee/kali-linux
+        docker run -it jasonchaffee/kali-linux:latest zsh
+        break
     fi
 }
 
 
-if [ $check = 0 ]
+check_zsh=$(grep baegi ~/.zshrc | wc -l)
+check_bash=$(grep baegi ~/.bashrc | wc -l)
+
+if [ $check_zsh -eq 0 ] && [ $check_bash -eq 0 ]
 then
-    echo "alias baegi=\"$pwd/baegi.sh\"" >> ~/.zshrc
+    echo "alias baegi=\"$PWD/baegi.sh\"" >> ~/.zshrc
+    echo "alias baegi=\"$PWD/baegi.sh\"" >> ~/.bashrc
+elif [ $check_zsh -eq 0 ]
+then
+    echo "alias baegi=\"$PWD/baegi.sh\"" >> ~/.zshrc
     echo "Alias 'baegi' agregado a ~/.zshrc"
+elif [ $check_bash -eq 0 ]
+then
+    echo "alias baegi=\"$PWD/baegi.sh\"" >> ~/.bashrc
+    echo "Alias 'baegi' agregado a ~/.bashrc"
 fi
+
 
 while [[ $# -gt 0 ]]
 do
     key="$1"
 
     case $key in
-        -1n)
-        app="1n"
+        -a)
+        app="a"
         shift
         ;;
-        -1ns)
-        app="1ns"
+        -as)
+        app="as"
+        shift
+        ;;
+        -kali)
+        app="kali"
         shift
         ;;
         *)    # default case
@@ -93,9 +124,12 @@ noSelectLamp "$app"
 while [ $selec = 0 ]
 do
     logo
-    printf "[ + ] ( 2"; if [ $app = '1' ] ; then printf '*'; fi; printf " ) - Container Kali Linux ( docker ) \n"
-    printf "[ + ] ( X"; if [ $app = 'X' ] ; then printf '*'; fi; printf " ) - close\n"
-    echo ""
+    printf "\n- baegi -a \t contenedor docker lamp sobre el directorio en el que este situado ( solo apache )"
+    printf "\n- baegi -as \t contenedor docker lamp sobre el directorio en el que este situado ( apache & sql )"
+    printf "\n\t\t es necesario que en la carpeta donde este situado exista unicamente una carpeta mysql (o se ceara automaticamente)"
+    printf "\n\t\t y otra donde se enecuentren los archivos para apache"
+    printf "\n- baegi -kali \t contenedor docker con todas las herramientas de kali linux"
+    printf "\n"
     printf "―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――"
     echo ""
     read app
@@ -104,13 +138,6 @@ do
     then
         exit
     fi
-    if [ $app = "1" ]
-    then
-        f_existe jasonchaffee/kali-linux
-        docker run -it jasonchaffee/kali-linux:latest zsh
-        break
-    fi
+
     noSelectLamp "$app"
 done
-
-

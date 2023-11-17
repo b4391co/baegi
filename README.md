@@ -1,37 +1,38 @@
-# Baegi
+# OBJETIVO
+Este script, tiene como objetivo simplificar el manejo de contenedores Docker, facilitando la creación y ejecución de contenedores específicos para el desarrollo de aplicaciones web basadas en el stack LAMP (Linux, Apache, MySQL, PHP) y proporcionando una opción para ejecutar un contenedor Kali Linux con todas las herramientas preinstaladas.
 
-## Descripción
+# USO
 
-Baegi es un script de línea de comandos diseñado para simplificar la creación de contenedores Docker, con un enfoque en contenedores LAMP (Linux, Apache, MySQL, PHP) y un contenedor Kali Linux. El script permite crear y configurar fácilmente contenedores Docker para diferentes propósitos.
+## Uso Básico
+Para ejecutar el script y obtener información sobre las opciones disponibles, puedes utilizar el siguiente comando:
 
-## Uso
+```
+baegi
+```
 
-1. Descarga el script `baegi.sh` a tu sistema.
+Esto mostrará un menú con las opciones disponibles, incluyendo la creación de contenedores LAMP y la ejecución de un contenedor Kali Linux.
 
-2. Asegúrate de que el script tenga permisos de ejecución. Puedes hacerlo con el siguiente comando:
+### Crear Contenedor LAMP (solo Apache)
 
-   ```bash
-   chmod +x baegi.sh
-   ```
+```
+baegi -a
+```
 
-3. Ejecuta el script utilizando el siguiente comando:
+Este comando creará y ejecutará un contenedor Docker LAMP que solo incluye Apache. El contenedor utilizará el directorio actual como directorio de trabajo.
 
-   ```bash
-   ./baegi.sh
-   ```
+### Crear Contenedor LAMP (Apache y MySQL)
 
-4. Sigue las instrucciones proporcionadas por el script para seleccionar y configurar el tipo de contenedor que deseas crear.
+```
+baegi -as
+```
 
-5. El script te guiará a través de la creación y configuración del contenedor Docker seleccionado.
+Este comando creará y ejecutará un contenedor Docker LAMP que incluye tanto Apache como MySQL. Es necesario que en el directorio actual exista únicamente una carpeta llamada mysql (o se creará automáticamente) y otra carpeta donde se encuentren los archivos para Apache.
 
-## Opciones de Contenedor
+### Crear Contenedor Kali Linux
 
-Baegi actualmente admite dos opciones de contenedor:
+```
+baegi -kali
+```
+Este comando creará y ejecutará un contenedor Docker con todas las herramientas de Kali Linux preinstaladas.
 
-- **Container LAMP (docker)**: Crea un contenedor Docker con el entorno LAMP (Linux, Apache, MySQL, PHP). Puedes especificar un directorio para crear la base del proyecto y configurar la carpeta web. También puedes optar por crear una carpeta para MySQL.
-
-- **Container Kali Linux (docker)**: Crea un contenedor Docker con Kali Linux. Te lleva directamente al shell de Kali Linux dentro del contenedor.
-
-## Alias Zsh
-
-El script agrega un alias "baegi" a tu archivo `~/.zshrc` si aún no está presente. Esto facilita la ejecución del script en futuras sesiones de terminal.
+Recuerda que puedes salir del script en cualquier momento escribiendo "X". ¡Espero que este script te resulte útil!
