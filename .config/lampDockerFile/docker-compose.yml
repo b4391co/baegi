@@ -5,6 +5,7 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/24
+
 services:
   app:
     build: .
@@ -18,7 +19,9 @@ services:
     depends_on:
       - db
     networks:
-      - my_network
+      my_network:
+        ipv4_address: 172.20.0.4
+
   db:
     image: mysql:latest
     ports:
@@ -26,7 +29,9 @@ services:
     volumes:
       - "${DB_VOLUME}:/var/lib/mysql:delegated"
     networks:
-      - my_network
+      my_network:
+        ipv4_address: 172.20.0.2
+
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -36,4 +41,5 @@ services:
     depends_on:
       - db
     networks:
-      - my_network
+      my_network:
+        ipv4_address: 172.20.0.3
