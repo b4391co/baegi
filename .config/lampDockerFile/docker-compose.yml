@@ -1,23 +1,32 @@
 version: '3'
-
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
 services:
   app:
     build: .
     ports:
       - "80:80"
     volumes:
-      - ./files:/var/www/html:delegated
+      - "${APP_VOLUME}:/var/www/html:delegated"
     environment:
-      XDEBUG_CONFIG: remote_host=host.docker.internal
+      XDEBUG_CONFIG: remote_host=172.20.0.1
       PHP_IDE_CONFIG: serverName=localhost
     depends_on:
       - db
+    networks:
+      - my_network
   db:
     image: mysql:latest
     ports:
       - "3306:3306"
     volumes:
-      - ./mysql:/var/lib/mysql:delegated
+      - "${DB_VOLUME}:/var/lib/mysql:delegated"
+    networks:
+      - my_network
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     environment:
@@ -26,3 +35,5 @@ services:
       - "8080:80"
     depends_on:
       - db
+    networks:
+      - my_network

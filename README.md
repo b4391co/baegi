@@ -12,18 +12,10 @@ baegi
 
 Esto mostrará un menú con las opciones disponibles, incluyendo la creación de contenedores LAMP y la ejecución de un contenedor Kali Linux.
 
-### Crear Contenedor LAMP (solo Apache)
-
-```
-baegi -a
-```
-
-Este comando creará y ejecutará un contenedor Docker LAMP que solo incluye Apache. El contenedor utilizará el directorio actual como directorio de trabajo.
-
 ### Crear Contenedor LAMP (Apache y MySQL)
 
 ```
-baegi -as
+baegi -lamp
 ```
 
 Este comando creará y ejecutará un contenedor Docker LAMP que incluye tanto Apache como MySQL. Es necesario que en el directorio actual exista únicamente una carpeta llamada mysql (o se creará automáticamente) y otra carpeta donde se encuentren los archivos para Apache.

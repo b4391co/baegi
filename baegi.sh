@@ -53,21 +53,17 @@ function noSelectLamp {
         local carpetaFiles=$carpetaLAMP
     fi
 
-    if [ "$app" = "a" ]
+    if [ "$app" = "lamp" ]
     then
-        f_existe baegilamp
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app baegilamp
-        docker rm $NombreLamp
+        cd $baegidir/.config/lampDockerFile
+        export APP_VOLUME=$carpetaFiles
+        export DB_VOLUME=$carpetaLAMP/mysql
+        docker-compose up
+        docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
+        rm -rfv ./mysql
         exit
     fi
 
-    if [ "$app" = "as" ]
-    then
-        f_existe baegilamp
-        docker run -i -t --name $NombreLamp -p "80:80" -p "3306:3306" -v $carpetaFiles:/app -v $carpetaLAMP/mysql:/var/lib/mysql baegilamp
-        docker rm $NombreLamp
-        exit
-    fi
 
         if [ $app = "kali" ]
     then
@@ -101,12 +97,8 @@ do
     key="$1"
 
     case $key in
-        -a)
-        app="a"
-        shift
-        ;;
-        -as)
-        app="as"
+        -lamp)
+        app="lamp"
         shift
         ;;
         -kali)
@@ -124,8 +116,7 @@ noSelectLamp "$app"
 while [ $selec = 0 ]
 do
     logo
-    printf "\n- baegi -a \t contenedor docker lamp sobre el directorio en el que este situado ( solo apache )"
-    printf "\n- baegi -as \t contenedor docker lamp sobre el directorio en el que este situado ( apache & sql )"
+    printf "\n- baegi -lamp \t contenedor docker lamp sobre el directorio en el que este situado"
     printf "\n\t\t es necesario que en la carpeta donde este situado exista unicamente una carpeta mysql (o se ceara automaticamente)"
     printf "\n\t\t y otra donde se enecuentren los archivos para apache"
     printf "\n- baegi -kali \t contenedor docker con todas las herramientas de kali linux"
