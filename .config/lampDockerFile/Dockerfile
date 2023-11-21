@@ -1,11 +1,26 @@
-FROM mattrayner/lamp:latest
+FROM php:8.1-apache
 
-RUN apt-get update && apt-get -y install php-intl \
-    && echo "xdebug.remote_enable=on" >> /etc/php/8.0/apache2/conf.d/zz-xdebug.ini \
-    && echo "xdebug.remote_host=172.17.0.1" >> /etc/php/8.0/apache2/conf.d/zz-xdebug.ini \
-    && echo "xdebug.remote_autostart=on" >> /etc/php/8.0/apache2/conf.d/zz-xdebug.ini \
-    && echo "xdebug.remote_connect_back=0" >> /etc/php/8.0/apache2/conf.d/zz-xdebug.ini \
-    && echo "xdebug.idekey=VSCODE" >> /etc/php/8.0/apache2/conf.d/zz-xdebug.ini
+# Instala las extensiones necesarias de PHP
+RUN docker-php-ext-install mysqli pdo_mysql
 
-EXPOSE 9000
-CMD ["/run.sh"]
+# Instala Xdebug
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
+
+# Configura Apache
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+RUN echo "<VirtualHost *:80>\n\
+    DocumentRoot /var/www/html\n\
+    <Directory /var/www/html>\n\
+        AllowOverride All\n\
+        Require all granted\n\
+        Options Indexes FollowSymLinks\n\
+    </Directory>\n\
+</VirtualHost>" > /etc/apache2/sites-available/000-default.conf
+# Configura Xdebug
+RUN echo "xdebug.mode=debug\n\
+xdebug.start_with_request=yes\n\
+xdebug.client_host=host.docker.internal" > /usr/local/etc/php/conf.d/xdebug.ini
+
+# Expone el puerto 80
+EXPOSE 80
