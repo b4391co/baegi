@@ -15,6 +15,7 @@ echo "██╔══██╗██╔══██║██╔══╝░░�
 echo "██████╦╝██║░░██║███████╗╚██████╔╝██║"
 echo "╚═════╝░╚═╝░░╚═╝╚══════╝░╚═════╝░╚═╝"
 echo ""
+echo "========================================================================"
 echo ""
 }
 
@@ -41,23 +42,25 @@ function generarNombre {
 }
 
 
-function noSelectLamp {
+function baegi_exec {
     local app=$1
     local pwd=$(pwd)
-    local NombreLamp=$(generarNombre)
     local carpetaLAMP=$pwd
-    if [ $(ls -d */ | grep "mysql/"  | wc -l) = 1 ]
+    if [ $(ls -d */ | grep "mysql/"  | wc -l) = 1 ] && [ "$app" = "lamp" ]
     then
         local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "sql")
+        local carpetaMysql=$carpetaLAMP/mysql/
     else
         local carpetaFiles=$carpetaLAMP
+        local carpetaMysql=/tmp/
     fi
 
     if [ "$app" = "lamp" ]
     then
+        logo
         cd $baegidir/.config/lampDockerFile
         export APP_VOLUME=$carpetaFiles
-        export DB_VOLUME=$carpetaLAMP/mysql
+        export DB_VOLUME=$carpetaMysql
         docker-compose up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
         rm -rfv ./mysql
@@ -66,8 +69,26 @@ function noSelectLamp {
         exit
     fi
 
+    if [ "$app" = "nlamp" ]
+    then
+        logo
+        echo "DB-USER: admin"
+        echo "BD-PASSWD: QpWBHu9ni0J4"
+        echo "Cambiar contraseña!!!"
+        echo "========================================================================"
+        cp $baegidir/.config/mysql . -r
+        cd $baegidir/.config/lampDockerFile
+        export APP_VOLUME=$carpetaFiles
+        export DB_VOLUME=$carpetaMysql
+        docker-compose up
+        docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
+        rm -rfv ./mysql
+        cd $carpetaLAMP
+        sudo chown $USER:$USER * -R
+        exit
+    fi
 
-        if [ $app = "kali" ]
+    if [ $app = "kali" ]
     then
         f_existe jasonchaffee/kali-linux
         docker run -it jasonchaffee/kali-linux:latest zsh
@@ -103,6 +124,10 @@ do
         app="lamp"
         shift
         ;;
+        -nlamp)
+        app="nlamp"
+        shift
+        ;;
         -kali)
         app="kali"
         shift
@@ -113,17 +138,18 @@ do
     esac
 done
 
-noSelectLamp "$app"
+baegi_exec "$app"
 
 while [ $selec = 0 ]
 do
     logo
     printf "\n- baegi -lamp \t contenedor docker lamp sobre el directorio en el que este situado"
+    printf "\n- baegi -nlamp \t (new lamp) crea una carpeta ./mysql en el directorio acutal para que lamp la pueda utilizar"
     printf "\n\t\t es necesario que en la carpeta donde este situado exista unicamente una carpeta mysql (o se ceara automaticamente)"
     printf "\n\t\t y otra donde se enecuentren los archivos para apache"
     printf "\n- baegi -kali \t contenedor docker con todas las herramientas de kali linux"
     printf "\n"
-    printf "―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――"
+    printf "========================================================================"
     echo ""
     read app
     T=$app
@@ -132,5 +158,5 @@ do
         exit
     fi
 
-    noSelectLamp "$app"
+    baegi_exec "$app"
 done
