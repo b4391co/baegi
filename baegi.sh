@@ -61,6 +61,8 @@ function noSelectLamp {
         docker-compose up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
         rm -rfv ./mysql
+        cd $carpetaLAMP
+        sudo chown $USER:$USER * -R
         exit
     fi
 
