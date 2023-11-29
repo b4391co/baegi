@@ -46,13 +46,13 @@ function baegi_exec {
     local app=$1
     local pwd=$(pwd)
     local carpetaLAMP=$pwd
-    if [ $(ls -d */ | grep "mysql/"  | wc -l) = 1 ] && [ "$app" = "lamp" ]
+    if [ $(ls -d */ | grep -e "mysql/" -e "mongo/"  | wc -l) = 1 ] && [ "$app" = "lamp" ]
     then
-        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "sql")
-        local carpetaMysql=$carpetaLAMP/mysql/
+        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v -e "mysql/" -e "mongo/")
+        local carpetaDb=$carpetaLAMP/$(ls -d */ | grep -e "mysql/" -e "mongo/")
     else
         local carpetaFiles=$carpetaLAMP
-        local carpetaMysql=/tmp/
+        local carpetaDb=/tmp/
     fi
 
     if [ "$app" = "lamp" ]
@@ -60,10 +60,24 @@ function baegi_exec {
         logo
         cd $baegidir/.config/lampDockerFile
         export APP_VOLUME=$carpetaFiles
-        export DB_VOLUME=$carpetaMysql
-        docker-compose up
+        export DB_VOLUME=$carpetaDb
+        docker-compose -f docker-compose-mongodb.yml run --rm db bash
+
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
         rm -rfv ./mysql
+        cd $carpetaLAMP
+        sudo chown $USER:$USER * -R
+        exit
+    fi
+
+    if [ "$app" = "mlamp" ]
+    then
+        logo
+        cd $baegidir/.config/lampDockerFile
+        export APP_VOLUME=$carpetaFiles
+        export DB_VOLUME=$carpetaFiles
+        docker-compose -f docker-compose-mongodb.yml up
+        docker rm lampdockerfile-app-1 lampdockerfile-db-1
         cd $carpetaLAMP
         sudo chown $USER:$USER * -R
         exit
@@ -79,8 +93,8 @@ function baegi_exec {
         cp $baegidir/.config/mysql . -r
         cd $baegidir/.config/lampDockerFile
         export APP_VOLUME=$carpetaFiles
-        export DB_VOLUME=$carpetaMysql
-        docker-compose up
+        export DB_VOLUME=$carpetaDb
+        docker-compose -f docker-compose-mysql.yml up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
         rm -rfv ./mysql
         cd $carpetaLAMP
@@ -122,6 +136,10 @@ do
     case $key in
         -lamp)
         app="lamp"
+        shift
+        ;;
+        -mlamp)
+        app="mlamp"
         shift
         ;;
         -nlamp)

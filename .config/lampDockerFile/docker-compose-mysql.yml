@@ -1,11 +1,4 @@
-version: '3'
-networks:
-  my_network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24
-
+version: '3.8'
 services:
   app:
     build: .
@@ -16,11 +9,9 @@ services:
     environment:
       XDEBUG_CONFIG: remote_host=172.20.0.1
       PHP_IDE_CONFIG: serverName=localhost
-    depends_on:
-      - db
     networks:
       my_network:
-        ipv4_address: 172.20.0.4
+        ipv4_address: 172.20.0.4  # Asigna la dirección IP específica
 
   db:
     image: mysql:latest
@@ -37,9 +28,16 @@ services:
     environment:
       PMA_HOST: db
     ports:
-      - "8080:80"
+      - "88:80"
     depends_on:
       - db
     networks:
       my_network:
         ipv4_address: 172.20.0.3
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

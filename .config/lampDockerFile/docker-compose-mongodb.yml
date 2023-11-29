@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - "${APP_VOLUME}:/var/www/html:delegated"
+    environment:
+      XDEBUG_CONFIG: remote_host=172.20.0.1
+      PHP_IDE_CONFIG: serverName=localhost
+    networks:
+      my_network:
+        ipv4_address: 172.20.0.4  # Asigna la dirección IP específica
+
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - "${DB_VOLUME}:/data/db:delegated"
+    networks:
+      my_network:
+        ipv4_address: 172.20.0.5
+    command: ["bash", "-c", "mongod --bind_ip_all --dbpath /data/db"]
+    
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
