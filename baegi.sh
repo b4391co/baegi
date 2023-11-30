@@ -46,19 +46,13 @@ function baegi_exec {
     local app=$1
     local pwd=$(pwd)
     local carpetaLAMP=$pwd
-    if [ $(ls -d */ | grep -e "db/"  | wc -l) = 1 ] && [ "$app" = "lamp" ] || [ "$app" = "mlamp" ] 
+    if [ $(ls -d */ | grep "mysql/" | wc -l) = 1 ] && [ "$app" = "lamp" ]
     then
-        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "db/")
-        local carpetaDb=$carpetaLAMP/$(ls -d */ | grep "db/")
+        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "mysql/")
+        local carpetaDb=$carpetaLAMP/mysql/
     else
         local carpetaFiles=$carpetaLAMP
-        if [ "$app" = "mlamp" ] 
-        then
-            local carpetaDb=$carpetaFiles
-        elif [ "$app" = "lamp" ] 
-        then
-            local carpetaDb=/tmp/
-        fi
+        local carpetaDb=/tmp/
     fi
 
     if [ "$app" = "lamp" ]
@@ -67,25 +61,12 @@ function baegi_exec {
         cd $baegidir/.config/lampDockerFile
         export APP_VOLUME=$carpetaFiles
         export DB_VOLUME=$carpetaDb
-        docker-compose -f docker-compose-mongodb.yml run --rm db bash
-
+        docker-compose -f docker-compose-mysql.yml up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
-        rm -rfv ./mysql
+        rm -rfv ./mysql 
         cd $carpetaLAMP
         sudo chown $USER:$USER * -R
-        exit
-    fi
-
-    if [ "$app" = "mlamp" ]
-    then
-        logo
-        cd $baegidir/.config/lampDockerFile
-        export APP_VOLUME=$carpetaFiles
-        export DB_VOLUME=$carpetaDb
-        docker-compose -f docker-compose-mongodb.yml up
-        docker rm lampdockerfile-app-1 lampdockerfile-db-1
-        cd $carpetaLAMP
-        sudo chown $USER:$USER * -R
+        sudo rm -rfv mysql.sock auto.cnf binlog.index
         exit
     fi
 
@@ -103,6 +84,19 @@ function baegi_exec {
         docker-compose -f docker-compose-mysql.yml up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
         rm -rfv ./mysql
+        cd $carpetaLAMP
+        sudo chown $USER:$USER * -R
+        exit
+    fi
+    
+    if [ "$app" = "mlamp" ]
+    then
+        logo
+        cd $baegidir/.config/lampDockerFile
+        export APP_VOLUME=$carpetaLAMP
+        export DB_VOLUME=$carpetaLAMP
+        docker-compose -f docker-compose-mongodb.yml up
+        docker rm lampdockerfile-app-1 lampdockerfile-db-1
         cd $carpetaLAMP
         sudo chown $USER:$USER * -R
         exit
@@ -167,10 +161,11 @@ baegi_exec "$app"
 while [ $selec = 0 ]
 do
     logo
-    printf "\n- baegi -lamp \t contenedor docker lamp sobre el directorio en el que este situado"
-    printf "\n- baegi -nlamp \t (new lamp) crea una carpeta ./mysql en el directorio acutal para que lamp la pueda utilizar"
+    printf "\n- baegi -lamp \t contenedor docker LAMP sobre el directorio en el que este situado"
+    printf "\n- baegi -nlamp \t (new LAMP) crea una carpeta ./mysql en el directorio acutal para que LAMP la pueda utilizar"
     printf "\n\t\t es necesario que en la carpeta donde este situado exista unicamente una carpeta mysql (o se ceara automaticamente)"
     printf "\n\t\t y otra donde se enecuentren los archivos para apache"
+    printf "\n- baegi -mlamp \t (mongo LAMP) LAMP con MongoDB, archivos y db en la misma carpeta"
     printf "\n- baegi -kali \t contenedor docker con todas las herramientas de kali linux"
     printf "\n"
     printf "========================================================================"
