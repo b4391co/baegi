@@ -46,13 +46,19 @@ function baegi_exec {
     local app=$1
     local pwd=$(pwd)
     local carpetaLAMP=$pwd
-    if [ $(ls -d */ | grep -e "mysql/" -e "mongo/"  | wc -l) = 1 ] && [ "$app" = "lamp" ]
+    if [ $(ls -d */ | grep -e "db/"  | wc -l) = 1 ] && [ "$app" = "lamp" ] || [ "$app" = "mlamp" ] 
     then
-        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v -e "mysql/" -e "mongo/")
-        local carpetaDb=$carpetaLAMP/$(ls -d */ | grep -e "mysql/" -e "mongo/")
+        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "db/")
+        local carpetaDb=$carpetaLAMP/$(ls -d */ | grep "db/")
     else
         local carpetaFiles=$carpetaLAMP
-        local carpetaDb=/tmp/
+        if [ "$app" = "mlamp" ] 
+        then
+            local carpetaDb=$carpetaFiles
+        elif [ "$app" = "lamp" ] 
+        then
+            local carpetaDb=/tmp/
+        fi
     fi
 
     if [ "$app" = "lamp" ]
@@ -75,7 +81,7 @@ function baegi_exec {
         logo
         cd $baegidir/.config/lampDockerFile
         export APP_VOLUME=$carpetaFiles
-        export DB_VOLUME=$carpetaFiles
+        export DB_VOLUME=$carpetaDb
         docker-compose -f docker-compose-mongodb.yml up
         docker rm lampdockerfile-app-1 lampdockerfile-db-1
         cd $carpetaLAMP
