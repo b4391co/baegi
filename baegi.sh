@@ -108,6 +108,12 @@ function baegi_exec {
         docker run -it jasonchaffee/kali-linux:latest zsh
         break
     fi
+    if [ $app = "osrf" ]
+    then
+        f_existe i3visio/osrframework
+        docker run -it i3visio/osrframework
+        break
+    fi
 }
 
 
@@ -150,6 +156,10 @@ do
         app="kali"
         shift
         ;;
+        -osrf)
+        app="osrf"
+        shift
+        ;;
         *)    # default case
         shift
         ;;
@@ -167,15 +177,12 @@ do
     printf "\n\t\t y otra donde se enecuentren los archivos para apache"
     printf "\n- baegi -mlamp \t (mongo LAMP) LAMP con MongoDB, archivos y db en la misma carpeta"
     printf "\n- baegi -kali \t contenedor docker con todas las herramientas de kali linux"
+    printf "\n- baegi -osrf \t contenedor docker con todas las herramientas de Osintframework"
     printf "\n"
     printf "========================================================================"
     echo ""
-    read app
-    T=$app
-    if [ $app = "X" ]
-    then
-        exit
-    fi
+    exit
+
 
     baegi_exec "$app"
 done
