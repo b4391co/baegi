@@ -110,8 +110,8 @@ function baegi_exec {
     fi
     if [ $app = "osrf" ]
     then
-        f_existe i3visio/osrframework
-        docker run -it i3visio/osrframework
+        f_existe vaultsecurity/osint
+        docker run -it vaultsecurity/osint
         break
     fi
 }
@@ -177,7 +177,7 @@ do
     printf "\n\t\t y otra donde se enecuentren los archivos para apache"
     printf "\n- baegi -mlamp \t (mongo LAMP) LAMP con MongoDB, archivos y db en la misma carpeta"
     printf "\n- baegi -kali \t contenedor docker con todas las herramientas de kali linux"
-    printf "\n- baegi -osrf \t contenedor docker con todas las herramientas de Osintframework"
+    printf "\n- baegi -osrf \t contenedor docker con todas las herramientas de Osint"
     printf "\n"
     printf "========================================================================"
     echo ""

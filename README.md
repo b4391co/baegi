@@ -48,3 +48,12 @@ baegi -kali
 Este comando creará y ejecutará un contenedor Docker con todas las herramientas de Kali Linux preinstaladas.
 
 Recuerda que puedes salir del script en cualquier momento escribiendo "X". ¡Espero que este script te resulte útil!
+
+
+### Crear Contenedor con utilidades Osint
+
+```bash
+baegi -osrf 
+```
+
+contenedor docker con todas herramientas de Osint.
