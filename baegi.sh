@@ -46,17 +46,17 @@ function baegi_exec {
     local app=$1
     local pwd=$(pwd)
     local carpetaLAMP=$pwd
-    if [ $(ls -d */ | grep "mysql/" | wc -l) = 1 ] && [ "$app" = "lamp" ]
-    then
-        local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "mysql/")
-        local carpetaDb=$carpetaLAMP/mysql/
-    else
-        local carpetaFiles=$carpetaLAMP
-        local carpetaDb=/tmp/
-    fi
 
     if [ "$app" = "lamp" ]
     then
+        if [ $(ls -d */ | grep "mysql/" | wc -l) = 1 ]
+        then
+            local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "mysql/")
+            local carpetaDb=$carpetaLAMP/mysql/
+        else
+            local carpetaFiles=$carpetaLAMP
+            local carpetaDb=/tmp/
+        fi
         logo
         cd $baegidir/.config/lampDockerFile
         export APP_VOLUME=$carpetaFiles
@@ -72,20 +72,32 @@ function baegi_exec {
 
     if [ "$app" = "nlamp" ]
     then
+        if [ $(ls -d */ | grep "mysql/" | wc -l) = 0 ]
+        then
+            cp $baegidir/.config/mysql . -r
+        fi
+        if [ $(ls -d */ | grep "mysql/" | wc -l) = 1 ]
+        then
+            local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "mysql/")
+            local carpetaDb=$carpetaLAMP/mysql/
+        else
+            local carpetaFiles=$carpetaLAMP
+            local carpetaDb=/tmp/
+        fi
         logo
         echo "DB-USER: admin"
         echo "BD-PASSWD: QpWBHu9ni0J4"
         echo "Cambiar contraseña!!!"
         echo "========================================================================"
-        cp $baegidir/.config/mysql . -r
         cd $baegidir/.config/lampDockerFile
         export APP_VOLUME=$carpetaFiles
         export DB_VOLUME=$carpetaDb
         docker-compose -f docker-compose-mysql.yml up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
-        rm -rfv ./mysql
+        rm -rfv ./mysql 
         cd $carpetaLAMP
         sudo chown $USER:$USER * -R
+        sudo rm -rfv mysql.sock auto.cnf binlog.index
         exit
     fi
     
