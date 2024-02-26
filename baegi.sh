@@ -117,7 +117,8 @@ function baegi_exec {
     if [ $app = "kali" ]
     then
         f_existe booyaabes/kali-linux-full
-        docker run -it booyaabes/kali-linux-full zsh
+        docker run --name baegi_kali -it booyaabes/kali-linux-full zsh
+        docker rm baegi_kali
         break
     fi
     if [ $app = "osrf" ]
