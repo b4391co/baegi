@@ -63,7 +63,7 @@ function baegi_exec {
         export DB_VOLUME=$carpetaDb
         docker-compose -f docker-compose-mysql.yml up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
-        rm -rfv ./mysql 
+        rm -rfv ./mysql
         cd $carpetaLAMP
         sudo chown $USER:$USER * -R
         sudo rm -rfv mysql.sock auto.cnf binlog.index
