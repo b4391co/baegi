@@ -70,6 +70,29 @@ function baegi_exec {
         exit
     fi
 
+    if [ "$app" = "mysql" ]
+    then
+        if [ $(ls -d */ | grep "mysql/" | wc -l) = 1 ]
+        then
+            local carpetaFiles=$carpetaLAMP/$(ls -d */ | grep -v "mysql/")
+            local carpetaDb=$carpetaLAMP/mysql/
+        else
+            local carpetaFiles=$carpetaLAMP
+            local carpetaDb=/tmp/
+        fi
+        logo
+        cd $baegidir/.config/lampDockerFile
+        export APP_VOLUME=$carpetaFiles
+        export DB_VOLUME=$carpetaDb
+        docker-compose -f docker-compose-mysql-only.yml up
+        docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-db-1
+        rm -rfv ./mysql
+        cd $carpetaLAMP
+        sudo chown $USER:$USER * -R
+        sudo rm -rfv mysql.sock auto.cnf binlog.index
+        exit
+    fi
+
     if [ "$app" = "nlamp" ]
     then
         if [ $(ls -d */ | grep "mysql/" | wc -l) = 0 ]
@@ -94,7 +117,7 @@ function baegi_exec {
         export DB_VOLUME=$carpetaDb
         docker-compose -f docker-compose-mysql.yml up
         docker rm lampdockerfile-phpmyadmin-1 lampdockerfile-app-1 lampdockerfile-db-1
-        rm -rfv ./mysql 
+        rm -rfv ./mysql
         cd $carpetaLAMP
         sudo chown $USER:$USER * -R
         sudo rm -rfv mysql.sock auto.cnf binlog.index
@@ -165,6 +188,10 @@ do
         app="nlamp"
         shift
         ;;
+        -mysql)
+        app="mysql"
+        shift
+        ;;
         -kali)
         app="kali"
         shift
@@ -185,6 +212,7 @@ while [ $selec = 0 ]
 do
     logo
     printf "\n- baegi -lamp \t contenedor docker LAMP sobre el directorio en el que este situado"
+    printf "\n- baegi -mysql \t contenedor docker solo con mysql y phpmyadmin"
     printf "\n- baegi -nlamp \t (new LAMP) crea una carpeta ./mysql en el directorio acutal para que LAMP la pueda utilizar"
     printf "\n\t\t es necesario que en la carpeta donde este situado exista unicamente una carpeta mysql (o se ceara automaticamente)"
     printf "\n\t\t y otra donde se enecuentren los archivos para apache"

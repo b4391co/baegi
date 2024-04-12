@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - "${DB_VOLUME}:/var/lib/mysql:delegated"
+    networks:
+      my_network:
+        ipv4_address: 172.20.0.2
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: db
+    ports:
+      - "88:80"
+    depends_on:
+      - db
+    networks:
+      my_network:
+        ipv4_address: 172.20.0.3
+
+networks:
+  my_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
